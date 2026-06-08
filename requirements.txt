@@ -1,0 +1,8 @@
+fastapi[standard]
+uvicorn
+sqlalchemy
+pydantic
+pydantic-settings
+pandas
+python-multipart
+

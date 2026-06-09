@@ -6,6 +6,7 @@ pydantic-settings
 pandas
 python-multipart
 passlib[bcrypt]
+bcrypt==3.2.2
 httpx
 pytest-asyncio
 PyJWT

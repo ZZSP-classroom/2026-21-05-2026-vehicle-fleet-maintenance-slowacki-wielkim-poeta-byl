@@ -1,9 +1,9 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional
 from app.models.vehicle import VehicleStatus
 
 class VehicleBase(BaseModel):
-    vin: str
+    vin: str = Field(..., min_length=17, max_length=17)
     make: str
     model: str
     year: int

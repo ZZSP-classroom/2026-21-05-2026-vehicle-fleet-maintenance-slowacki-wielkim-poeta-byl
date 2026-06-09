@@ -1,8 +1,12 @@
-fastapi[standard]
+﻿fastapi[standard]
 uvicorn
 sqlalchemy
 pydantic
 pydantic-settings
 pandas
 python-multipart
-
+passlib[bcrypt]
+httpx
+pytest-asyncio
+PyJWT
+aiosqlite

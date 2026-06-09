@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from app.api.endpoints import vehicles, telemetry, analytics, inventory
 from app.db.base import Base # Imports all models
@@ -15,13 +16,31 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="VehicleFleetMaintenance", lifespan=lifespan)
 
+# CORS middleware configuration
+origins = [
+    "http://localhost:3000",
+    "*" # For development
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 app.include_router(vehicles.router, prefix="/api/vehicles", tags=["vehicles"])
 app.include_router(telemetry.router, prefix="/api/telemetry", tags=["telemetry"])
 app.include_router(analytics.router, prefix="/api/analytics", tags=["analytics"])
 app.include_router(reports.router, prefix="/api/reports", tags=["reports"])
-app.include_router(inventory.router, prefix="/api/inventory", tags=["inventory"])
+app.include_router(inventory.router, prefix="/parts", tags=["inventory"])
 
 @app.get("/")
 def root():
     return {"message": "Welcome to VehicleFleetMaintenance API"}
+
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}

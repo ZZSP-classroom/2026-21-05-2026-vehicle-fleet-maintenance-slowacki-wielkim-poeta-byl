@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
+from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List
 from sqlalchemy.future import select
@@ -38,6 +38,12 @@ async def update_vehicle(vehicle_id: int, vehicle: VehicleCreate, db: AsyncSessi
     if db_vehicle is None:
         raise HTTPException(status_code=404, detail="Vehicle not found")
     return db_vehicle
+
+@router.delete("/{vehicle_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_vehicle(vehicle_id: int, db: AsyncSession = Depends(get_db)):
+    db_vehicle = await crud_vehicle.delete_vehicle(db, vehicle_id=vehicle_id)
+    if db_vehicle is None:
+        raise HTTPException(status_code=404, detail="Vehicle not found")
 
 @router.get("/{vehicle_id}/maintenance")
 async def get_vehicle_maintenance(vehicle_id: int, db: AsyncSession = Depends(get_db)):

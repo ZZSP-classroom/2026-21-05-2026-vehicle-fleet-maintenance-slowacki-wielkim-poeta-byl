@@ -1,15 +1,21 @@
 import pytest
 from httpx import AsyncClient, ASGITransport
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
+from sqlalchemy.orm import sessionmaker
 from app.db.base import Base
 from app.main import app
 from app.api.dependencies import get_db
+from sqlalchemy.pool import StaticPool
 
 # Use in-memory sqlite for tests
 SQLALCHEMY_DATABASE_URL = "sqlite+aiosqlite:///:memory:"
 
-engine = create_async_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
-TestingSessionLocal = async_sessionmaker(autocommit=False, autoflush=False, bind=engine)
+engine = create_async_engine(
+    SQLALCHEMY_DATABASE_URL, 
+    connect_args={"check_same_thread": False},
+    poolclass=StaticPool
+)
+TestingSessionLocal = async_sessionmaker(autocommit=False, autoflush=False, bind=engine, expire_on_commit=False)
 
 async def override_get_db():
     async with TestingSessionLocal() as session:

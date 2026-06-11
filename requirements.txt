@@ -11,3 +11,4 @@ httpx
 pytest-asyncio
 PyJWT
 aiosqlite
+greenlet

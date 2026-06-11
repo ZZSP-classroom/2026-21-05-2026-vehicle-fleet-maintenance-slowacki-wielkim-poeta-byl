@@ -6,6 +6,14 @@ from app.db.base import Base # Imports all models
 from app.db.session import engine
 import app.api.endpoints.auth as auth
 import app.api.endpoints.reports as reports
+from sqlalchemy.ext.asyncio import create_async_engine
+from config import settings
+
+print(f"Connecting to database at: {settings.SQLALCHEMY_DATABASE_URI}")
+
+engine = create_async_engine(
+    settings.SQLALCHEMY_DATABASE_URI, connect_args={"check_same_thread": False}
+)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -44,3 +52,5 @@ def root():
 @app.get("/health")
 def health_check():
     return {"status": "ok"}
+
+

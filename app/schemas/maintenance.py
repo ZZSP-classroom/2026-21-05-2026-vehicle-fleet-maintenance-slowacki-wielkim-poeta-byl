@@ -13,7 +13,7 @@ class ServiceRecordCreate(ServiceRecordBase):
 
 class ServiceRecord(ServiceRecordBase):
     id: int
-    date_performed: datetime
+    date: datetime
 
     class Config:
         from_attributes = True
